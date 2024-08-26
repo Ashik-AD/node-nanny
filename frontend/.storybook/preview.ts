@@ -1,9 +1,9 @@
 import type { Preview } from '@storybook/react'
-import {
-    withRouter,
-    reactRouterParameters,
-} from 'storybook-addon-remix-react-router'
+import { withRouter } from 'storybook-addon-remix-react-router'
+
 import '../src/style.css'
+import '../src/tailwind.css'
+
 const preview: Preview = {
     decorators: [withRouter],
     parameters: {
