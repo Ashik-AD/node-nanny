@@ -1,0 +1,42 @@
+.container {
+    background: var(--background-secondary);
+    height: 100%;
+    width: 48px;
+    min-height: 100dvh;
+    padding-block: 24px;
+    padding-inline: 12px;
+    border-radius: 12px;
+    overflow-x: hidden;
+
+    button,
+    a {
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .nav__item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--default-400);
+
+        .nav__item__icon {
+            display: flex;
+            font-size: 24px;
+        }
+
+        &:hover {
+            color: var(--secondary-400);
+        }
+    }
+    .nav__item-active {
+        color: var(--secondary-400);
+    }
+
+    .nav__divider {
+        width: 12px;
+        background: var(--default-700);
+        height: 4px;
+    }
+}
