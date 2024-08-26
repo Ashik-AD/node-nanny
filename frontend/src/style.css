@@ -1,7 +1,7 @@
 :root {
-  --background-primary: #15131A;
-  --background-secondary: #1F1A2B;
-  --content-foreground: #2A1F32;
+  --background-primary: #15131a;
+  --background-secondary: #1f1a2b;
+  --content-foreground: #2a1f32;
 
   /* Default color */
   --default-50: #fafafa;
@@ -17,12 +17,12 @@
   --default-base: var(--default-300);
 
   /* Primary color */
-  --primary-50: #E6F1FE;
+  --primary-50: #e6f1fe;
   --primary-100: #cce3fd;
   --primary-200: #99c7fb;
   --primary-300: #d4d4d8;
   --primary-400: #338ef7;
-  --primary-500: #006FEE;
+  --primary-500: #006fee;
   --primary-600: #005bc4;
   --primary-700: #004493;
   --primary-800: #002e62;
@@ -71,7 +71,7 @@
   /* Primary color */
   --danger-50: #fee7ef;
   --danger-100: #fdd0df;
-  --danger-200: #faa0bf; 
+  --danger-200: #faa0bf;
   --danger-300: #f871a0;
   --danger-400: #f54180;
   --danger-500: #f31260;
@@ -81,12 +81,21 @@
   --danger-900: #310413;
   --danger-base: var(--danger-500);
 
-  --content-100: #FFFFFF;
-  --content-200: #F4F4F5;
-  --content-300: #E4E4E7;
-  --content-400: #D4D4D8;
+  --content-100: #ffffff;
+  --content-200: #f4f4f5;
+  --content-300: #e4e4e7;
+  --content-400: #d4d4d8;
 
-
+  --text-tiny-size: 0.75rem;
+  --line-height-tiny: 1rem;
+  --text-small-size: 0.875rem;
+  --line-height-small: 1.25rem;
+  --text-medium-size: 1rem;
+  --line-height-medium: 1.5rem;
+  --text-large-size: 1.125rem;
+  --line-height-large: 1.75rem;
+  --text-xl-size: 1.5rem;
+  --line-height-xl: 2.25rem;
 }
 html {
   background-color: rgba(27, 38, 54, 1);
