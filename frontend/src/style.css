@@ -105,15 +105,10 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
 }
-html {
-    background-color: rgba(27, 38, 54, 1);
-    text-align: center;
-    color: white;
-}
-
 body {
     margin: 0;
-    color: white;
+    background: var(--background-primary);
+    color: var(--default-200);
     font-family:
         'Nunito',
         -apple-system,
@@ -140,5 +135,23 @@ body {
 
 #app {
     height: 100vh;
-    text-align: center;
+}
+
+.text-primary {
+    color: var(--primary-base);
+}
+.text-secondary {
+    color: var(--secondary-base);
+}
+.text-info {
+    color: var(--primary-base);
+}
+.text-success {
+    color: var(--success-base);
+}
+.text-warning {
+    color: var(--warning-base);
+}
+.text-danger {
+    color: var(--danger-base);
 }
