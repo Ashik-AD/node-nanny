@@ -1,0 +1,40 @@
+.text-tiny {
+  font-size: var(--text-tiny-size);
+  line-height: var(--line-height-tiny);
+}
+
+.text-small {
+  font-size: var(--text-small-size);
+  line-height: var(--line-height-small);
+}
+
+.text-medium {
+  font-size: var(--text-medium-size);
+  line-height: var(--line-height-medium);
+}
+
+.text-large {
+  font-size: var(--text-large-size);
+  line-height: var(--line-height-large);
+}
+
+.text-xlarge {
+  font-size: var(--text-xl-size);
+  line-height: var(--line-height-xl);
+}
+
+.font-regular {
+  font-weight: 400;
+}
+.font-medium {
+  font-weight: 500;
+}
+.font-semibold {
+  font-weight: 600;
+}
+.font-bold {
+  font-weight: 700;
+}
+.font-black {
+  font-weight: 900;
+}
