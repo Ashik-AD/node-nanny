@@ -1,0 +1,5 @@
+.container {
+  padding: 24px;
+  background: var(--content-foreground);
+  border-radius: 12px;
+}
