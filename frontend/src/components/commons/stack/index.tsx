@@ -9,7 +9,8 @@ type Props = {
     wrap?: boolean
     gap?: string
     placeCenter?: boolean
-    contentAlign?: 'spaceBetween' | 'spaceEvenly' | 'spaceAround'
+    justifyContent?: 'spaceBetween' | 'spaceEvenly' | 'spaceAround'
+    alignItems?: AlignSetting
     isResponsive?: boolean
 }
 export default function Stack({
@@ -20,10 +21,11 @@ export default function Stack({
     wrap,
     gap,
     placeCenter,
+    alignItems,
     isResponsive = false,
-    contentAlign,
+    justifyContent,
 }: Props) {
-    const stylesName = `${styles.stack} ${className ? className : ''} ${dir == 'column' ? styles.stack_column : styles.stack_row} ${wrap ? styles.stack_wrapp : ''} ${placeCenter ? styles.stack_place_center : ''} ${isResponsive ? styles.stack_responsive : ''} ${contentAlign ? styles[contentAlign] : ''}`
+    const stylesName = `${styles.stack} ${className ? className : ''} ${dir == 'column' ? styles.stack_column : styles.stack_row} ${wrap ? styles.stack_wrapp : ''} ${placeCenter ? styles.stack_place_center : ''} ${isResponsive ? styles.stack_responsive : ''} ${justifyContent ? styles[justifyContent] : ''} ${alignItems ? styles[`align-${alignItems}`] : ''}`
     return (
         <div className={stylesName} style={{ gap: gap || 24, ...style }}>
             {children}

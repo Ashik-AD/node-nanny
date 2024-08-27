@@ -37,3 +37,18 @@
 .spaceAround {
     justify-content: space-around;
 }
+.align-start {
+    align-items: flex-start;
+}
+.align-center {
+    align-items: center;
+}
+.align-end {
+    align-items: flex-end;
+}
+.align-right {
+    align-items: right;
+}
+.align-left {
+    align-items: left;
+}
