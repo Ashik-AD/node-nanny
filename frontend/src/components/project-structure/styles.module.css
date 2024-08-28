@@ -1,0 +1,45 @@
+.project__struct__sub {
+    border-left: 1px solid var(--default-800);
+    .struct__node {
+        padding-left: 32px;
+    }
+}
+.child__files {
+    padding-left: 24px;
+}
+
+.struct__node,
+.struct__root {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-block: 8px;
+}
+.struct__node,
+.sub__project__root {
+    position: relative;
+    font-size: var(--text-size-small);
+    padding-left: 24px;
+
+    &::before,
+    &::after {
+        position: absolute;
+        content: '';
+        background: var(--default-800);
+        left: 0;
+    }
+
+    &::before {
+        width: 32px;
+        height: 1px;
+    }
+    &::after {
+        width: 1px;
+        height: 100%;
+        transform: translateY(-50%);
+    }
+
+    & .struct__node {
+        padding-left: 16px;
+    }
+}
