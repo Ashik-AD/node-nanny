@@ -83,6 +83,14 @@
     --danger-900: #310413;
     --danger-base: var(--danger-500);
 
+    /* Flat colors */
+    --default-flat: rgba(212, 212, 216, 0.4);
+    --primary-flat: rgba(0, 111, 238, 0.2);
+    --secondary-flat: rgba(120, 40, 200, 0.2);
+    --success-flat: rgba(23, 201, 100, 0.2);
+    --warning-flat: rgba(245, 165, 36, 0.2);
+    --danger-flat: rgba(243, 18, 96, 0.2);
+
     --content-100: #ffffff;
     --content-200: #f4f4f5;
     --content-300: #e4e4e7;
