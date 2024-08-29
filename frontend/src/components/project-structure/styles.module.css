@@ -1,7 +1,27 @@
+.project_structure-extend {
+    --tree-bg: var(--secondary-300);
+}
+.project_structure-unextend {
+    --tree-bg: var(--default-800);
+    .project__tree {
+        display: none;
+    }
+}
+
+.project__tree {
+    padding-left: 8px;
+}
+
 .project__struct__sub {
-    border-left: 1px solid var(--default-800);
+    border-left: 1px solid var(--tree-bg);
+
+    & .project__struct__sub {
+        border-left: 1px solid var(--tree-bg);
+        margin-left: 24px;
+    }
+
     .struct__node {
-        padding-left: 32px;
+        padding-left: 24px;
     }
 }
 .child__files {
@@ -14,6 +34,10 @@
     align-items: center;
     gap: 8px;
     padding-block: 8px;
+
+    &:hover {
+        background: var(--tree-bg);
+    }
 }
 .struct__node,
 .sub__project__root {
@@ -25,12 +49,12 @@
     &::after {
         position: absolute;
         content: '';
-        background: var(--default-800);
+        background: var(--tree-bg);
         left: 0;
     }
 
     &::before {
-        width: 32px;
+        width: 24px;
         height: 1px;
     }
     &::after {
@@ -41,5 +65,11 @@
 
     & .struct__node {
         padding-left: 16px;
+    }
+}
+.sub__project__root {
+    &::after {
+        width: 1px;
+        left: -1px;
     }
 }
