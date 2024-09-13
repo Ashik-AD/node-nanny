@@ -1,0 +1,52 @@
+.task_item {
+    font-size: var(--text-small-size);
+    font-weight: 600;
+    line-height: var(--line-small-height);
+}
+
+.task_item-completed {
+    color: var(--success-base);
+}
+
+.task_item-scanning {
+    font-size: var(--text-medium-size);
+}
+.task_item-failed {
+    color: var(--danger-base);
+}
+
+.task_item-pending {
+    color: var(--default-400);
+}
+
+.tasks__additional {
+    padding-left: 12px;
+    color: var(--default-300);
+    font-weight: 500;
+}
+
+.animate_spin {
+    animation-name: spin;
+    animation-duration: 400ms;
+    animation-iteration-count: infinite;
+}
+.task__icons {
+    display: flex;
+    gap: 12px;
+}
+.icons__arrow {
+    transition: transform 200ms linear;
+    color: var(--default-400);
+}
+.icons__arrow-rotate {
+  transform: rotate(90deg);
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
