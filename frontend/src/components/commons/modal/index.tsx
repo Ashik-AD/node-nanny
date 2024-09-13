@@ -11,7 +11,7 @@ type Props = {
     children: ReactNode
     isShow: boolean
     onClose: () => void
-    onClickOutsideClose: () => void
+    onClickOutsideClose?: () => void
     title?: string
     subtitle?: string
 }
