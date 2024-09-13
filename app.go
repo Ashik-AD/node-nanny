@@ -5,7 +5,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/fs"
 	"log"
 	"os"
 	"path"
@@ -33,7 +32,6 @@ type ProjectFile struct {
 type ProjectDependency struct {
 	Name    string
 	Version string
-	IsDev   bool
 }
 
 type EnvVariable struct {
@@ -44,10 +42,11 @@ type Project struct {
 	Path string
 	Name string
 
-	Files        []ProjectFile
-	Dependencies []ProjectDependency
-	EnvVariables map[string]string
-	SubProjects  []Project
+	Files           []ProjectFile
+	Dependencies    []ProjectDependency
+	DevDependencies []ProjectDependency
+	EnvVariables    map[string]string
+	SubProjects     []Project
 }
 
 // NewApp creates a new App application struct
@@ -77,42 +76,51 @@ func (a *App) OpenProjectSelect() (project Project) {
 		log.Fatal("Failed to open file explorer ", err)
 	}
 
+	// Get child/sub directories and files
 	dirs, dirErr := os.ReadDir(selection)
 	if dirErr != nil {
 		log.Fatal(dirErr)
 	}
 
 	project = Project{}
+	for _, fs := range dirs {
+		// check if the fs is directory, then it can be possibly sub-project
+		if fs.IsDir() {
 
-	for _, obj := range dirs {
-		if obj.IsDir() {
-			_, ok := DIRECTORIES_TO_BE_IGNORE[strings.ToLower(obj.Name())]
-
+			// ignore some of the directories
+			_, ok := DIRECTORIES_TO_BE_IGNORE[strings.ToLower(fs.Name())]
 			if !ok {
-				fmt.Println("Scanning Dir: ", obj.Name())
-				objAbspath := path.Join(selection, obj.Name())
+				fmt.Println("Scanning Dir: ", fs.Name())
 
-				if childDir, dirErr := os.ReadDir(objAbspath); dirErr != nil {
+				// Absolute path the directory/file
+				fsAbsPath := path.Join(selection, fs.Name())
+
+				if childDir, dirErr := os.ReadDir(fsAbsPath); dirErr != nil {
 					log.Fatal(dirErr)
-					log.Fatal("Failed scan child directory %q in %v", objAbspath, selection)
+					log.Fatal("Failed scan child directory %q in %v", fsAbsPath, selection)
 				} else {
-
-					isProject := slices.ContainsFunc(childDir, func(entry fs.DirEntry) bool {
+					// If the directory contain `package.json` file
+					// Then treat directory as sub|child-project
+					isProject := slices.ContainsFunc(childDir, func(entry os.DirEntry) bool {
 						return entry.Name() == "package.json"
 					})
+
 					projectFiles := []ProjectFile{}
 
+					// ignore dirctories in the sub-project
+					// if sub-directry is project directory,
+					// then add to project files
 					for _, file := range childDir {
 						if !file.IsDir() {
 							fileName := file.Name()
 							if isProject {
 								if hasAllowedFile(ALLOWED_FILES, fileName) {
 									file := ProjectFile{
-										Path: path.Join(objAbspath, fileName),
+										Path: path.Join(fsAbsPath, fileName),
 										Name: fileName,
 									}
 									projectFiles = append(projectFiles, file)
-									fmt.Printf("\n\tFound file: %v in path: %v\n", fileName, objAbspath)
+									fmt.Printf("\n\tFound file: %v in path: %v\n", fileName, fsAbsPath)
 								}
 							}
 						}
@@ -120,8 +128,8 @@ func (a *App) OpenProjectSelect() (project Project) {
 
 					if isProject {
 						childProject := Project{
-							Name:  obj.Name(),
-							Path:  objAbspath,
+							Name:  fs.Name(),
+							Path:  fsAbsPath,
 							Files: projectFiles,
 						}
 						project.SubProjects = append(project.SubProjects, childProject)
@@ -131,31 +139,31 @@ func (a *App) OpenProjectSelect() (project Project) {
 				}
 			}
 		} else {
-			if !obj.IsDir() {
+			// check parent/root directory is a project
+			isProject := slices.ContainsFunc(dirs, func(entry os.DirEntry) bool {
+				return entry.Name() == "package.json"
+			})
 
-				fileName := obj.Name()
-				isProject := slices.ContainsFunc(dirs, func(entry fs.DirEntry) bool {
-					return entry.Name() == "package.json"
-				})
-
-				if isProject {
-					if hasAllowedFile(ALLOWED_FILES, fileName) {
-						file := ProjectFile{
-							Path: path.Join(selection, fileName),
-							Name: fileName,
-						}
-						project.Files = append(project.Files, file)
+			fileName := fs.Name()
+			if isProject {
+				if hasAllowedFile(ALLOWED_FILES, fileName) {
+					file := ProjectFile{
+						Path: path.Join(selection, fileName),
+						Name: fileName,
 					}
+					project.Files = append(project.Files, file)
 				}
 			}
 		}
 	}
 
+	// if project is not empty, then
+	// analyze project dependencies, env. variables etc
 	if !reflect.ValueOf(project).IsZero() {
 		// runtime.EventsEmit(a.ctx, "onDirectoryScanDone", "project directory scanning done")
 
-		dependencies := []ProjectDependency{}
-		envVariables := map[string]string{}
+		dependencies := []ProjectDependency{} // contains both dev. and prod. dependencies
+		envVariables := map[string]string{}   // containes env. variables
 
 		for _, fileObj := range project.Files {
 
@@ -182,95 +190,49 @@ func (a *App) OpenProjectSelect() (project Project) {
 				if err != nil {
 					log.Fatal("Failed to parse `", fileName, "`")
 				}
-				depList, ok := data["dependencies"]
-				if ok {
-					for key, value := range depList.(map[string]interface{}) {
-						dep := ProjectDependency{key, value.(string), false}
-						dependencies = append(dependencies, dep)
-					}
-				} else {
-					fmt.Println("key is not found")
-				}
-
-				devDepList, ok := data["devDependencies"]
-				if ok {
-					for key, value := range devDepList.(map[string]interface{}) {
-						dep := ProjectDependency{key, value.(string), true}
-						dependencies = append(dependencies, dep)
-					}
-				}
+				prod, dev := getProjectDependencies(data)
+				project.Dependencies = prod
+				project.DevDependencies = dev
 
 			case ".env":
-				//Todo implement
-				scanner := bufio.NewScanner(file)
-
-				for scanner.Scan() {
-					if scanner.Text() != "" {
-						values := strings.SplitN(scanner.Text(), "=", 2)
-						envVariables[values[0]] = values[1]
-					}
-				}
+				envVariables = getEnvVariables(file)
 			}
 		}
 
 		// Checking dependencies on sub project
-		for i, sub := range project.SubProjects {
-			subDependencies := []ProjectDependency{}
-			subEnvVariables := map[string]string{}
+		if len(project.SubProjects) > 0 {
+			for i, sub := range project.SubProjects {
+				for _, file := range sub.Files {
+					openedFile, err := os.Open(file.Path)
+					if err != nil {
+						log.Fatalf("\n\tFailed to open file `%v` at path: %v", file.Name, file.Path)
+						log.Fatal(err)
+					}
+					defer openedFile.Close()
 
-			for _, file := range sub.Files {
-
-				openedFile, err := os.Open(file.Path)
-				if err != nil {
-					log.Fatalf("\n\tFailed to open file `%v` at path: %v", file.Name, file.Path)
-					log.Fatal(err)
-				}
-				defer openedFile.Close()
-
-				content, err := os.ReadFile(file.Path)
-				if err != nil {
-					log.Fatalf("\n\tFailed to read file `%v` at path: %v", file.Name, file.Path)
-					log.Fatal(err)
-				}
-
-				switch strings.ToLower(file.Name) {
-				case "package.json":
-					var data map[string]interface{}
-
-					jsonErr := json.Unmarshal(content, &data)
-					if jsonErr != nil {
-						log.Fatal("Failed to parse JSON of file: ", file.Name)
-						log.Fatal(jsonErr)
+					content, err := os.ReadFile(file.Path)
+					if err != nil {
+						log.Fatalf("\n\tFailed to read file `%v` at path: %v", file.Name, file.Path)
+						log.Fatal(err)
 					}
 
-					depList, ok := data["dependencies"]
-					if ok {
-						for key, value := range depList.(map[string]interface{}) {
-							dep := ProjectDependency{key, value.(string), false}
-							subDependencies = append(subDependencies, dep)
+					switch strings.ToLower(file.Name) {
+					case "package.json":
+						var data map[string]interface{}
+
+						jsonErr := json.Unmarshal(content, &data)
+						if jsonErr != nil {
+							log.Fatal("Failed to parse JSON of file: ", file.Name)
+							log.Fatal(jsonErr)
 						}
-					} else {
-						fmt.Println("key is not found")
-					}
+						prod, dev := getProjectDependencies(data)
+						project.SubProjects[i].Dependencies = prod
+						project.SubProjects[i].DevDependencies = dev
 
-					devDepList, ok := data["devDependencies"]
-					if ok {
-						for key, value := range devDepList.(map[string]interface{}) {
-							dep := ProjectDependency{key, value.(string), true}
-							subDependencies = append(subDependencies, dep)
-						}
+					case ".env":
+						subEnvVaribles := getEnvVariables(openedFile)
+						project.SubProjects[i].EnvVariables = subEnvVaribles
 					}
-					project.SubProjects[i].Dependencies = subDependencies
-				case ".env":
-					scanner := bufio.NewScanner(openedFile)
-
-					for scanner.Scan() {
-						if scanner.Text() != "" {
-							values := strings.SplitN(scanner.Text(), "=", 2)
-							subEnvVariables[values[0]] = values[1]
-						}
-					}
-					project.SubProjects[i].EnvVariables = subEnvVariables
 				}
 			}
 		}
@@ -294,4 +256,44 @@ func hasAllowedFile(FilesName []string, Name string) bool {
 		}
 	}
 	return isExist
+}
+
+// return dependencies, and devDependencies from json
+func getProjectDependencies(jsonMap map[string]interface{}) (prod, dev []ProjectDependency) {
+	prodDepList, ok := jsonMap["dependencies"]
+	if !ok {
+		fmt.Println("key `dependecies` is not found")
+	} else {
+		for key, value := range prodDepList.(map[string]interface{}) {
+			dep := ProjectDependency{key, value.(string)}
+			prod = append(prod, dep)
+		}
+	}
+
+	devDepList, ok := jsonMap["devDependencies"]
+	if !ok {
+		fmt.Println("key `devDependencies` is not found")
+	} else {
+		for key, value := range devDepList.(map[string]interface{}) {
+			dep := ProjectDependency{key, value.(string)}
+			dev = append(dev, dep)
+		}
+	}
+	return prod, dev
+}
+
+// return env. variables from .env file
+func getEnvVariables(envFile *os.File) map[string]string {
+	envMap := map[string]string{}
+	scanner := bufio.NewScanner(envFile)
+
+	defer envFile.Close()
+
+	for scanner.Scan() {
+		if scanner.Text() != "" {
+			values := strings.SplitN(scanner.Text(), "=", 2)
+			envMap[values[0]] = values[1]
+		}
+	}
+	return envMap
 }
