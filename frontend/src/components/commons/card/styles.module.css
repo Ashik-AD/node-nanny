@@ -1,0 +1,46 @@
+.container {
+    background: var(--background-secondary);
+    padding: 24px;
+    border-radius: 12px;
+    overflow: hidden;
+
+    .refresh__icon {
+        color: var(--default-300);
+    }
+
+    .card__content {
+        overflow-y: auto;
+    }
+}
+
+.container_status-refreshing {
+    .refresh__icon {
+        animation: spin infinite 600ms linear;
+    }
+    .card__content {
+        animation: fade infinite 800ms ease;
+    }
+}
+.container_status-failed {
+    .refresh__icon {
+        color: var(--danger-400);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fade {
+    from {
+        opacity: 0.8;
+    }
+    to {
+        opacity: 0.5;
+    }
+}
