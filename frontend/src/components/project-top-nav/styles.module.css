@@ -1,0 +1,27 @@
+.nav__item {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    color: var(--defaut-500);
+
+    & > span {
+        white-space: nowrap;
+    }
+
+    .nav__icon {
+        font-size: 18px;
+    }
+
+    &:hover {
+        color: var(--secondary-300);
+    }
+}
+.nav__item-active {
+    & > span {
+        color: var(--secondary-500);
+    }
+    .nav__icon {
+        color: var(--secondary-600);
+    }
+}
