@@ -1,6 +1,7 @@
 //@TODO:
 // - fetch disk usage
 // - implement refresh behaviour
+// - fix bar tooltip or disable it
 
 import ApexChart from 'react-apexcharts'
 import { Chip } from '@nextui-org/react'
