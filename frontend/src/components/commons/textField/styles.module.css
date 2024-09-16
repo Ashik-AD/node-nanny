@@ -1,0 +1,52 @@
+.input {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    label {
+        font-size: 16px;
+    }
+
+    .input__box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 1rem;
+        border: 0;
+        outline: 1px solid var(--default-500);
+        border-radius: 12px;
+
+        input {
+            background: transparent !important;
+            flex: 1;
+            color: var(--default-300);
+            font-size: var(--text-medium-size);
+            line-height: var(--line-height-medium);
+            outline: transparent;
+            border: 0;
+        }
+
+        .input__icon {
+            display: flex;
+            flex: 0;
+            font-size: 24px;
+            opacity: 0.8;
+        }
+
+        &:has(input:focus-visible) {
+            outline: 2px solid var(--default-600);
+        }
+    }
+
+    .error__message {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--danger-500);
+    }
+
+    &.input_error {
+        .input__box {
+            outline-color: var(--danger-500);
+        }
+    }
+}
