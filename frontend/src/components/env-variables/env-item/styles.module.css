@@ -1,0 +1,14 @@
+.dropdown {
+    background: var(--background-secondary);
+    width: 120px !important;
+    min-width: 0;
+    box-shadow: 0 4px 8px var(--background-primary);
+}
+
+.secret__encrypt {
+    display: block;
+    padding-top: 10px;
+    line-height: 0px;
+    user-select: none;
+  cursor: text;
+}
