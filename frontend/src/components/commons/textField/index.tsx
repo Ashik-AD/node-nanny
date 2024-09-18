@@ -13,6 +13,7 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
 const TextField = forwardRef<HTMLInputElement, Props>((props, ref) => {
     const {
         className,
+        style,
         id,
         type = 'text',
         label,
@@ -29,6 +30,7 @@ const TextField = forwardRef<HTMLInputElement, Props>((props, ref) => {
             {label && <label htmlFor={id || cid}>{label}</label>}
             <div
                 className={`${styles.input__box} ${className ? className : ''}`}
+                style={style}
             >
                 {leadingIcon && (
                     <span
