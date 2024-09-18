@@ -1,0 +1,9 @@
+.log_item {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+
+    .log__status {
+        text-transform: capitalize;
+    }
+}

@@ -1,0 +1,22 @@
+.item {
+    position: relative;
+    margin-left: 180px;
+
+    &:before {
+        position: absolute;
+        content: '';
+        height: calc(150%);
+        width: 1px;
+        background: var(--default-700);
+        top: -24px;
+    }
+
+    &::after {
+        position: absolute;
+        content: '';
+        height: 1px;
+        width: 24px;
+        background: var(--default-700);
+        top: 50%;
+    }
+}
