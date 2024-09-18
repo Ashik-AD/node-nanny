@@ -3,13 +3,8 @@
     /* width: 100%; */
     display: flex;
     flex-wrap: nowrap;
-
-    /* & > * { */
-    /*   flex: 1; */
-    /* } */
 }
-
-.stack_column {
+.stack_col {
     flex-direction: row;
 }
 .stack_row {
@@ -51,4 +46,10 @@
 }
 .align-left {
     align-items: left;
+}
+
+.stack_distribute {
+    & > * {
+        flex: 1;
+    }
 }

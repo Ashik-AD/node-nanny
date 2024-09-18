@@ -7,27 +7,42 @@ type Props = {
     className?: string
     style?: CSSProperties
     wrap?: boolean
-    gap?: string
+    gap?: string | number
     placeCenter?: boolean
     justifyContent?: 'spaceBetween' | 'spaceEvenly' | 'spaceAround'
     alignItems?: AlignSetting
+    isDistribute?: boolean
     isResponsive?: boolean
 }
-export default function Stack({
-    children,
-    dir = 'row',
-    className,
-    style,
-    wrap,
-    gap,
-    placeCenter,
-    alignItems,
-    isResponsive = false,
-    justifyContent,
-}: Props) {
-    const stylesName = `${styles.stack} ${className ? className : ''} ${dir == 'column' ? styles.stack_column : styles.stack_row} ${wrap ? styles.stack_wrapp : ''} ${placeCenter ? styles.stack_place_center : ''} ${isResponsive ? styles.stack_responsive : ''} ${justifyContent ? styles[justifyContent] : ''} ${alignItems ? styles[`align-${alignItems}`] : ''}`
+
+export default function Stack(props: Props) {
+    const {
+        children,
+        dir = 'row',
+        className,
+        style,
+        wrap,
+        gap,
+        placeCenter,
+        alignItems,
+        isResponsive = false,
+        justifyContent,
+        isDistribute,
+    } = props
+
+    let stylesName = `${className ? className : ''} ${wrap ? styles.stack_wrapp : ''}`
+    let stackDir = dir == 'row' ? styles.stack_row : styles.stack_col
+    let stackResponsive = isResponsive ? styles.stack_responsive : ''
+    let contentCenter = placeCenter ? styles.stack_place_center : ''
+    let distributeStyle = isDistribute ? styles.stack_distribute : ''
+    let itemsCenter = alignItems ? styles[`align-${alignItems}`] : ''
+    let contentSpacing = justifyContent ? styles[justifyContent] : ''
+
     return (
-        <div className={stylesName} style={{ gap: gap || 24, ...style }}>
+        <div
+            className={`${styles.stack} ${stackDir} ${stylesName} ${contentCenter} ${itemsCenter} ${distributeStyle} ${stackResponsive} ${contentSpacing}`}
+            style={{ gap: gap || 24, ...style }}
+        >
             {children}
         </div>
     )
