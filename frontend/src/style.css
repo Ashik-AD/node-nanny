@@ -163,3 +163,8 @@ body {
 .text-danger {
     color: var(--danger-base);
 }
+
+button.btn_reset {
+    background: transparent;
+    border-color: transparent;
+}
