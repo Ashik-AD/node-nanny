@@ -1,10 +1,10 @@
 export namespace main {
 	
-	export class Project {
+	export class ProjectDetails {
 	
 	
 	    static createFrom(source: any = {}) {
-	        return new Project(source);
+	        return new ProjectDetails(source);
 	    }
 	
 	    constructor(source: any = {}) {

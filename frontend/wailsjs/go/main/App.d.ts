@@ -4,4 +4,4 @@ import {main} from '../models';
 
 export function Greet(arg1:string):Promise<string>;
 
-export function OpenProjectSelect():Promise<main.Project>;
+export function OpenProjectSelect():Promise<main.ProjectDetails>;
