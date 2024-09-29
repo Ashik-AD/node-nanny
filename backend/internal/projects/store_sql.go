@@ -100,17 +100,6 @@ func (ss *sqlstore) GetProjectByID(pid string) (*Project, error) {
 	return &pr, nil
 }
 
-func (ss *sqlstore) GetDetailedProject(pid string) (*Project, error) {
-	// implement this method
-	var pr Project
-
-	pid = strings.TrimSpace(pid)
-	if pid == "" {
-		return nil, errors.New("empty project ID")
-	}
-	return &pr, nil
-}
-
 func (ss *sqlstore) NewProjectID() string {
 	return uuid.NewString()
 }

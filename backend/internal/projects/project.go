@@ -8,6 +8,8 @@ import (
 
 type store interface {
 	SaveProject(ctx context.Context, project *Project) (string, error)
+	GetProjects() (*[]Project, error)
+	GetProjectByID(string) (*Project, error)
 }
 
 type Project struct {
@@ -16,7 +18,7 @@ type Project struct {
 	Path         string
 	Detail       string
 	Dependencies string
-	Files         string
+	Files        string
 	Subproject   string
 	Logs         string
 }
