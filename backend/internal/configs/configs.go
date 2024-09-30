@@ -13,3 +13,7 @@ func (cfg *Configs) DependencySqlTable() string {
 func (cfg *Configs) PackgeDetailsSqlTable() string {
 	return "pkgdetails"
 }
+
+func (cfg *Configs) SubprojectSqlTable() string {
+	return "subprojects"
+}
