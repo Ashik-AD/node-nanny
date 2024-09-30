@@ -17,3 +17,7 @@ func (cfg *Configs) PackgeDetailsSqlTable() string {
 func (cfg *Configs) SubprojectSqlTable() string {
 	return "subprojects"
 }
+
+func (cfg *Configs) FilesSqlTable() string {
+	return "files"
+}
